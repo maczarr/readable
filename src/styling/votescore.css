@@ -1,0 +1,33 @@
+.votescore {
+  border: 1px solid #333;
+  border-radius: 5px;
+  display: inline-block;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.votescore__edit {
+  background-color: transparent;
+  border-color: #333;
+  border-width: 0;
+  padding: 0 .5rem;
+  color: #b00;
+}
+
+.votescore__edit:hover {
+  background-color: #b00;
+  color: #fff;
+}
+
+.votescore__edit--down {
+  border-right-width: 1px;
+}
+
+.votescore__edit--up {
+  border-left-width: 1px;
+}
+
+.votescore__score {
+  display: inline-block;
+  margin: 0 1rem;
+}

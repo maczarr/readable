@@ -1,0 +1,34 @@
+.post-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.post-list__item {
+  padding: 0 0 1rem;
+  margin: 0 0 1rem;
+}
+
+.post-list__item:not(:last-child) {
+  border-bottom: 1px solid #bbb;
+}
+
+.posting__title {
+  font-size: 1.2rem;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.posting__body {
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.meta {
+  margin: 0 0 0.5rem;
+}
+
+.meta > *:not(:last-child) {
+  margin-right: 1rem;
+}
