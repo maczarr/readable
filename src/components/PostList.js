@@ -20,6 +20,7 @@ export default function PostList ({ posts }) {
             </p>
             <h1 className="posting__title">{post.title}</h1>
             <p className="posting__body">{post.body}</p>
+            <p className="posting__comment-count">Comments: {post.commentList.length}</p>
             <VoteScore parentId={post.id} />
           </article>
         </li>

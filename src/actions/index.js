@@ -1,10 +1,9 @@
 export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES'
-export const RECEIVE_POSTINGS = 'RECEIVE_POSTINGS'
-export const CREATE_POST = 'CREATE_POST'
+export const WRITE_POST = 'WRITE_POST'
 /*export const EDIT_POST = 'EDIT_POST'
 export const DELETE_POST = 'DELETE_POST'*/
 export const RECEIVE_VOTE_POST = 'RECEIVE_VOTE_POST'
-export const CREATE_COMMENT = 'CREATE_COMMENT'
+export const WRITE_COMMENT = 'WRITE_COMMENT'
 /*export const EDIT_COMMENT = 'EDIT_COMMENT'
 export const DELETE_COMMENT = 'DELETE_COMMENT'
 export const VOTE_COMMENT = 'VOTE_COMMENT'*/
@@ -22,26 +21,32 @@ export const requestCategories = () => dispatch => (
     .then(categories => dispatch(receiveCategories(categories)))
 );
 
-export const receivePostings = postings => ({
-  type: RECEIVE_POSTINGS,
-  postings
-});
+export const requestComments = (parentId) => dispatch => (
+  API
+    .getPostComments(parentId)
+    .then(comments => comments.forEach(comment => dispatch(writeComment(comment)) ))
+);
 
 export const requestPostings = () => dispatch => (
   API
     .getAllPosts()
-    .then(posts => dispatch(receivePostings(posts)))
+    .then(posts => posts.forEach(post => {
+      dispatch(writePost(post));
+      dispatch(requestComments(post.id));
+    }))
 );
 
-export function createPost ({ id, timestamp, title, body, owner, category }) {
+export function writePost ({ id, timestamp, title, body, author, category, voteScore, deleted }) {
   return {
-    type: CREATE_POST,
+    type: WRITE_POST,
     id,
     timestamp,
     title,
     body,
-    owner,
-    category
+    author,
+    category,
+    voteScore,
+    deleted
   }
 }
 
@@ -72,14 +77,17 @@ export const sendVotePost = ({ id, vote }) => dispatch => (
     .then(post => dispatch(receiveVotePost(post)))
 );
 
-export function createComment ({ id, timestamp, body, owner, parentId }) {
+export function writeComment ({ id, timestamp, body, author, parentId, parentDeleted, voteScore, deleted }) {
   return {
-    type: CREATE_COMMENT,
+    type: WRITE_COMMENT,
     id,
     timestamp,
     body,
-    owner,
-    parentId
+    author,
+    parentId,
+    parentDeleted,
+    voteScore,
+    deleted
   }
 }
 

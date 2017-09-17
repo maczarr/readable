@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { requestCategories, requestPostings, createPost } from '../actions';
+import { requestCategories, requestPostings, writePost } from '../actions';
 import { connect } from 'react-redux';
 import PostList from '../components/PostList';
 import '../styling/categories.css';
@@ -33,13 +33,14 @@ class Startpage extends Component {
   }
 }
 
-function mapStateToProps({ categories, posts }) {
+function mapStateToProps({ categories, posts, comments }) {
   return {
     categories,
-    posts: Object.keys(posts).map(post => {
+    posts: Object.keys(posts).map(postId => {
       return {
-        id: post,
-        ...posts[post]
+        id: postId,
+        ...posts[postId],
+        commentList: comments.filter(comment => comment.parentId === postId)
       }
     })
   }
@@ -49,7 +50,7 @@ function mapDispatchToProps(dispatch) {
   return {
     requestPosts: () => dispatch(requestPostings()),
     requestCats: () => dispatch(requestCategories()),
-    addPost: (data) => dispatch(createPost(data))
+    addPost: (data) => dispatch(writePost(data))
   }
 }
 

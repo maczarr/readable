@@ -3,12 +3,11 @@ import { combineReducers } from 'redux';
 
 import {
   RECEIVE_CATEGORIES,
-  RECEIVE_POSTINGS,
-  CREATE_POST,
+  WRITE_POST,
 /*  EDIT_POST,
   DELETE_POST,*/
   RECEIVE_VOTE_POST,
-  CREATE_COMMENT,
+  WRITE_COMMENT,
 /*  EDIT_COMMENT,
   DELETE_COMMENT,
   VOTE_COMMENT*/
@@ -27,26 +26,8 @@ function categories(state = [], action) {
 
 function posts(state = {}, action) {
   switch(action.type) {
-    case RECEIVE_POSTINGS:
-      const { postings } = action;
-      let postingList = {};
-
-      postings.forEach(post => {
-        postingList[post.id] = {
-          "timestamp": post.timestamp,
-          "title": post.title,
-          "body": post.body,
-          "author": post.author,
-          "category": post.category,
-          "voteScore": post.voteScore,
-          "deleted": post.deleted
-        }
-      });
-
-      return postingList
-
-    case CREATE_POST:
-      const { id, timestamp, title, body, author, category } = action;
+    case WRITE_POST:
+      const { id, timestamp, title, body, author, category, voteScore, deleted } = action;
 
       return {
         ...state,
@@ -56,8 +37,8 @@ function posts(state = {}, action) {
           "body": body,
           "author": author,
           "category": category,
-          "voteScore": 0,
-          "deleted": false
+          "voteScore": voteScore,
+          "deleted": deleted
         }
       }
 
@@ -83,18 +64,30 @@ function posts(state = {}, action) {
 }
 
 function comments(state = [], action) {
-  const { id: cId, timestamp: cTimestamp, body: cBody, owner: cOwner, parentId: cParentId } = action;
+  const {
+    id: cId,
+    timestamp: cTimestamp,
+    body: cBody,
+    author: cAuthor,
+    parentId: cParentId,
+    voteScore: cVoteScore,
+    deleted: cDeleted,
+    parentDeleted: cParentDeleted
+  } = action;
 
   switch(action.type) {
-    case CREATE_COMMENT:
+    case WRITE_COMMENT:
       return [
         ...state,
         {
           "id": cId,
           "timestamp": cTimestamp,
           "body": cBody,
-          "author": cOwner,
-          "parentId": cParentId
+          "author": cAuthor,
+          "parentId": cParentId,
+          "voteScore": cVoteScore,
+          "deleted": cDeleted,
+          "parentDeleted": cParentDeleted
         }
       ]
     default:
