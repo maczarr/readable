@@ -7,6 +7,7 @@ export const WRITE_COMMENT = 'WRITE_COMMENT'
 /*export const EDIT_COMMENT = 'EDIT_COMMENT'
 export const DELETE_COMMENT = 'DELETE_COMMENT'
 export const VOTE_COMMENT = 'VOTE_COMMENT'*/
+export const CHANGE_SORT = 'CHANGE_SORT'
 
 import * as API from '../utils/api.js';
 
@@ -115,3 +116,8 @@ export function voteComment ({ id, vote }) {
   }
 }
 */
+
+export const changeSort = criteria => ({
+  type: CHANGE_SORT,
+  criteria
+});

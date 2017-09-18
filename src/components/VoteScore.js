@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { sendVotePost, sendVoteComment } from '../actions';
+import PlusIcon from 'react-icons/lib/fa/plus';
+import MinusIcon from 'react-icons/lib/fa/minus';
 import '../styling/votescore.css';
 
 class VoteScore extends Component {
@@ -9,9 +11,13 @@ class VoteScore extends Component {
 
     return (
       <div className="votescore">
-        <button onClick={() => vote({ id: entryId, vote: 'downVote', isPost: isPost })} className="votescore__edit votescore__edit--down">-</button>
+        <button onClick={() => vote({ id: entryId, vote: 'downVote', isPost: isPost })} className="votescore__edit votescore__edit--down">
+          <MinusIcon size={14} />
+        </button>
         <span className="votescore__score">{score}</span>
-        <button onClick={() => vote({ id: entryId, vote: 'upVote', isPost: isPost })} className="votescore__edit votescore__edit--up">+</button>
+        <button onClick={() => vote({ id: entryId, vote: 'upVote', isPost: isPost })} className="votescore__edit votescore__edit--up">
+          <PlusIcon size={14} />
+        </button>
       </div>
     )
   }

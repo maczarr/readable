@@ -10,7 +10,8 @@ import {
   WRITE_COMMENT,
 /*  EDIT_COMMENT,
   DELETE_COMMENT,
-  VOTE_COMMENT*/
+  VOTE_COMMENT,*/
+  CHANGE_SORT
 } from '../actions'
 
 function categories(state = [], action) {
@@ -18,7 +19,7 @@ function categories(state = [], action) {
 
   switch(action.type) {
     case RECEIVE_CATEGORIES:
-      return categories || state;
+      return categories;
     default:
       return state;
   }
@@ -97,8 +98,20 @@ function comments(state = {}, action) {
   }
 }
 
+function postSorting(state = '-timestamp', action) {
+  const { criteria } = action;
+
+  switch(action.type) {
+    case CHANGE_SORT:
+      return criteria;
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
   categories,
   posts,
-  comments
+  comments,
+  postSorting
 });
