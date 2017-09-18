@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { requestCategories, requestPostings, writePost } from '../actions';
+import { requestCategories } from '../actions';
 import { connect } from 'react-redux';
 import PostList from '../components/PostList';
 import '../styling/categories.css';
@@ -7,11 +7,10 @@ import '../styling/categories.css';
 class Startpage extends Component {
   componentWillMount() {
     this.props.requestCats();
-    this.props.requestPosts();
   }
 
   render() {
-    const { categories, posts } = this.props
+    const { categories } = this.props
 
     return (
       <div className="Startpage">
@@ -27,30 +26,21 @@ class Startpage extends Component {
           </ul>
         )}
 
-        <PostList posts={posts} />
+        <PostList />
       </div>
     );
   }
 }
 
-function mapStateToProps({ categories, posts, comments }) {
+function mapStateToProps({ categories }) {
   return {
-    categories,
-    posts: Object.keys(posts).map(postId => {
-      return {
-        id: postId,
-        ...posts[postId],
-        commentList: comments.filter(comment => comment.parentId === postId)
-      }
-    })
+    categories
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    requestPosts: () => dispatch(requestPostings()),
     requestCats: () => dispatch(requestCategories()),
-    addPost: (data) => dispatch(writePost(data))
   }
 }
 

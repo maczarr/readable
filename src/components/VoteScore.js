@@ -1,34 +1,35 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { sendVotePost } from '../actions';
+import { sendVotePost, sendVoteComment } from '../actions';
 import '../styling/votescore.css';
 
 class VoteScore extends Component {
   render() {
-    const { vote, score, parentId } = this.props;
+    const { vote, score, entryId, isPost } = this.props;
 
     return (
       <div className="votescore">
-        <button onClick={() => vote({ id: parentId, vote: 'downVote' })} className="votescore__edit votescore__edit--down">-</button>
+        <button onClick={() => vote({ id: entryId, vote: 'downVote', isPost: isPost })} className="votescore__edit votescore__edit--down">-</button>
         <span className="votescore__score">{score}</span>
-        <button onClick={() => vote({ id: parentId, vote: 'upVote' })} className="votescore__edit votescore__edit--up">+</button>
+        <button onClick={() => vote({ id: entryId, vote: 'upVote', isPost: isPost })} className="votescore__edit votescore__edit--up">+</button>
       </div>
     )
   }
 }
 
-function mapStateToProps({ posts }, parentId) {
-  const pId = parentId.parentId;
+function mapStateToProps({ posts, comments }, ownProps) {
+  const { entryId, isPost } = ownProps;
 
   return {
-    score: posts[pId].voteScore,
-    parentId: pId
+    score: isPost ? posts[entryId].voteScore : comments[entryId].voteScore,
+    entryId: entryId,
+    isPost: isPost
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    vote: (data) => dispatch(sendVotePost(data))
+    vote: (data) => data.isPost ? dispatch(sendVotePost(data)) : dispatch(sendVoteComment(data))
   }
 }
 

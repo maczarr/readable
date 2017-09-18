@@ -32,6 +32,7 @@ function posts(state = {}, action) {
       return {
         ...state,
         [id]: {
+          "id": id,
           "timestamp": timestamp,
           "title": title,
           "body": body,
@@ -49,6 +50,7 @@ function posts(state = {}, action) {
       return {
         ...state,
         [postId]: {
+          "id": postId,
           "timestamp": post.timestamp,
           "title": post.title,
           "body": post.body,
@@ -63,7 +65,7 @@ function posts(state = {}, action) {
   }
 }
 
-function comments(state = [], action) {
+function comments(state = {}, action) {
   const {
     id: cId,
     timestamp: cTimestamp,
@@ -77,9 +79,9 @@ function comments(state = [], action) {
 
   switch(action.type) {
     case WRITE_COMMENT:
-      return [
+      return {
         ...state,
-        {
+        [cId] : {
           "id": cId,
           "timestamp": cTimestamp,
           "body": cBody,
@@ -89,7 +91,7 @@ function comments(state = [], action) {
           "deleted": cDeleted,
           "parentDeleted": cParentDeleted
         }
-      ]
+      }
     default:
       return state;
   }
