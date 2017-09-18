@@ -1,9 +1,11 @@
 .votescore {
   border: 1px solid #333;
   border-radius: 5px;
-  display: inline-block;
   font-size: 1rem;
   line-height: 1;
+  width: 6rem;
+  display: flex;
+  justify-content: space-between;
 }
 
 .votescore__edit {
@@ -25,9 +27,4 @@
 
 .votescore__edit--up {
   border-left-width: 1px;
-}
-
-.votescore__score {
-  display: inline-block;
-  margin: 0 1rem;
 }
