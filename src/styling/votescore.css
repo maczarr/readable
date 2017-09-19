@@ -14,6 +14,7 @@
   border-width: 0;
   padding: 0 .5rem;
   color: #b00;
+  cursor: pointer;
 }
 
 .votescore__edit:hover {

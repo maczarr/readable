@@ -1,12 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './components/App';
+import Startpage from './pages/Startpage';
 import registerServiceWorker from './registerServiceWorker';
-import { createStore, applyMiddleware, compose } from 'redux'
-import reducer from './reducers'
+import { createStore, applyMiddleware, compose } from 'redux';
+import reducers from './reducers';
 import { Provider } from 'react-redux';
+import { Router, Route, browserHistory } from 'react-router';
+import { syncHistoryWithStore, routerMiddleware } from 'react-router-redux';
 import thunk from 'redux-thunk';
+import './index.css';
 
 const logger = store => next => action => {
   console.group(action.type)
@@ -18,17 +20,25 @@ const logger = store => next => action => {
 }
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const routingMiddleware = routerMiddleware(browserHistory);
 
 const store = createStore(
-  reducer,
+  reducers,
   composeEnhancers(
-    applyMiddleware(logger, thunk)
+    applyMiddleware(logger, thunk, routingMiddleware)
   )
 )
 
+const history = syncHistoryWithStore(browserHistory, store);
+
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <div className="app">
+      <Router history={history}>
+        <Route path="/" component={Startpage}/>
+        <Route path="/:category" component={Startpage}/>
+      </Router>
+    </div>
   </Provider>, document.getElementById('root')
 );
 registerServiceWorker();

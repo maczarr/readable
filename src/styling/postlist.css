@@ -1,10 +1,25 @@
 .list-sort {
   text-align: right;
-  margin: 0 0 2rem;
+  margin: 0 0 1rem;
 }
 
 .list-sort__label {
   margin-right: 0.5rem;
+}
+
+.posting-create {
+  background-color: #0b0;
+  color: #fff;
+  font-size: 1.2rem;
+  line-height: 1;
+  padding: 0.5rem 0.7rem;
+  border-width: 0;
+  margin: 0 0 2rem;
+  cursor: pointer;
+}
+
+.posting-create:hover {
+  background-color: #0a0;
 }
 
 .post-list {
@@ -25,6 +40,7 @@
 .meta {
   font-size: 0.875rem;
   line-height: 1;
+  color: #999;
   margin: 0 0 0.5rem;
   display: flex;
   justify-content: space-between;
@@ -54,13 +70,44 @@ a.posting__link:hover .posting__body {
   background-color: #e5e5e5;
 }
 
+a.posting__link:hover + .posting__modify {
+  opacity: 0.5;
+}
+
 .posting__body {
   font-size: 1rem;
   line-height: 1.5;
   background-color: #f5f5f5;
   padding: 0.5rem;
-  margin: 0 0 1rem;
+  margin: 0;
   transition: background 0.3s linear;
+}
+
+.posting__modify {
+  text-align: right;
+  margin: 0 0 1rem;
+  transition: opacity 0.5s ease-in;
+}
+
+.posting__modify-btn {
+  background-color: #f5f5f5;
+  color: #666;
+  line-height: 1;
+  padding: 0.3rem 0.6rem;
+  border-width: 0;
+  border-top: 1px solid #ddd;
+  margin: 0;
+  cursor: pointer;
+  transition: all 0.3s linear;
+}
+
+.posting__modify-btn:hover {
+  background-color: #ddd;
+  color: #333;
+}
+
+.posting__modify-btn--del {
+  margin-left: 1rem;
 }
 
 .posting__reactions {

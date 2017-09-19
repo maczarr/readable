@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { routerReducer } from 'react-router-redux';
 //import { getAllPosts } from '../utils/api.js';
 
 import {
@@ -98,7 +99,7 @@ function comments(state = {}, action) {
   }
 }
 
-function postSorting(state = '-timestamp', action) {
+function postSorting(state = '-voteScore', action) {
   const { criteria } = action;
 
   switch(action.type) {
@@ -113,5 +114,6 @@ export default combineReducers({
   categories,
   posts,
   comments,
-  postSorting
+  postSorting,
+  routing: routerReducer
 });
