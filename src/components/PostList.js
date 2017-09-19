@@ -10,7 +10,7 @@ import CommentIcon from 'react-icons/lib/fa/comment';
 import EditIcon from 'react-icons/lib/fa/pencil';
 import DeleteIcon from 'react-icons/lib/fa/trash';
 import '../styling/postlist.css';
-import '../styling/overlaymodal.css';
+//import '../styling/overlaymodal.css';
 
 class PostList extends Component {
   componentWillMount() {
