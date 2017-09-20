@@ -1,6 +1,4 @@
 .votescore {
-  border: 1px solid #333;
-  border-radius: 5px;
   font-size: 1rem;
   line-height: 1;
   width: 6rem;
@@ -8,17 +6,21 @@
   justify-content: space-between;
 }
 
+.votescore > * {
+  align-self: center;
+}
+
 .votescore__edit {
   background-color: transparent;
   border-color: #333;
   border-width: 0;
   padding: 0 .5rem;
-  color: #b00;
+  color: #032336;
   cursor: pointer;
 }
 
 .votescore__edit:hover {
-  background-color: #b00;
+  background-color: #6f8fa2;
   color: #fff;
 }
 

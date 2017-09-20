@@ -92,9 +92,10 @@ export const voteComment = (id, vote) =>
   fetch(`${api}/comments/${id}`, {
     method: 'POST',
     headers: {
-      ...headers
+      ...headers,
+      'Content-Type': 'application/json'
     },
-    body: vote
+    body: JSON.stringify({ option: vote })
   }).then(res => res.json())
 
 export const editComment = (id, timestamp, body) =>

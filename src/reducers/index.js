@@ -7,12 +7,11 @@ import {
   WRITE_POST,
 /*  EDIT_POST,
   DELETE_POST,*/
-  RECEIVE_VOTE_POST,
   WRITE_COMMENT,
 /*  EDIT_COMMENT,
-  DELETE_COMMENT,
-  VOTE_COMMENT,*/
-  CHANGE_SORT
+  DELETE_COMMENT,*/
+  CHANGE_POST_SORT,
+  CHANGE_COMMENT_SORT
 } from '../actions'
 
 function categories(state = [], action) {
@@ -29,30 +28,13 @@ function categories(state = [], action) {
 function posts(state = {}, action) {
   switch(action.type) {
     case WRITE_POST:
-      const { id, timestamp, title, body, author, category, voteScore, deleted } = action;
-
-      return {
-        ...state,
-        [id]: {
-          "id": id,
-          "timestamp": timestamp,
-          "title": title,
-          "body": body,
-          "author": author,
-          "category": category,
-          "voteScore": voteScore,
-          "deleted": deleted
-        }
-      }
-
-    case RECEIVE_VOTE_POST:
       const { post } = action;
       const postId = post.id;
 
       return {
         ...state,
         [postId]: {
-          "id": postId,
+          "id": post.id,
           "timestamp": post.timestamp,
           "title": post.title,
           "body": post.body,
@@ -68,30 +50,22 @@ function posts(state = {}, action) {
 }
 
 function comments(state = {}, action) {
-  const {
-    id: cId,
-    timestamp: cTimestamp,
-    body: cBody,
-    author: cAuthor,
-    parentId: cParentId,
-    voteScore: cVoteScore,
-    deleted: cDeleted,
-    parentDeleted: cParentDeleted
-  } = action;
-
   switch(action.type) {
     case WRITE_COMMENT:
+      const { comment } = action;
+      const commentId = comment.id;
+
       return {
         ...state,
-        [cId] : {
-          "id": cId,
-          "timestamp": cTimestamp,
-          "body": cBody,
-          "author": cAuthor,
-          "parentId": cParentId,
-          "voteScore": cVoteScore,
-          "deleted": cDeleted,
-          "parentDeleted": cParentDeleted
+        [commentId]: {
+          id: comment.id,
+          timestamp: comment.timestamp,
+          body: comment.body,
+          author: comment.author,
+          parentId: comment.parentId,
+          voteScore: comment.voteScore,
+          deleted: comment.deleted,
+          parentDeleted: comment.parentDeleted
         }
       }
     default:
@@ -103,7 +77,18 @@ function postSorting(state = '-voteScore', action) {
   const { criteria } = action;
 
   switch(action.type) {
-    case CHANGE_SORT:
+    case CHANGE_POST_SORT:
+      return criteria;
+    default:
+      return state;
+  }
+}
+
+function commentSorting(state = '-voteScore', action) {
+  const { criteria } = action;
+
+  switch(action.type) {
+    case CHANGE_COMMENT_SORT:
       return criteria;
     default:
       return state;
@@ -115,5 +100,6 @@ export default combineReducers({
   posts,
   comments,
   postSorting,
+  commentSorting,
   routing: routerReducer
 });

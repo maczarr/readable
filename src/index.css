@@ -9,7 +9,11 @@ body {
 }
 
 a {
-  color: #b00;
+  color: #032336;
+}
+
+a:hover {
+	text-decoration: none;
 }
 
 .app {

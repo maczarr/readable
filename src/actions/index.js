@@ -1,19 +1,46 @@
+import * as API from '../utils/api.js';
+
 export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES'
 export const WRITE_POST = 'WRITE_POST'
 /*export const EDIT_POST = 'EDIT_POST'
 export const DELETE_POST = 'DELETE_POST'*/
-export const RECEIVE_VOTE_POST = 'RECEIVE_VOTE_POST'
 export const WRITE_COMMENT = 'WRITE_COMMENT'
 /*export const EDIT_COMMENT = 'EDIT_COMMENT'
-export const DELETE_COMMENT = 'DELETE_COMMENT'
-export const VOTE_COMMENT = 'VOTE_COMMENT'*/
-export const CHANGE_SORT = 'CHANGE_SORT'
-
-import * as API from '../utils/api.js';
+export const DELETE_COMMENT = 'DELETE_COMMENT'*/
+export const CHANGE_POST_SORT = 'CHANGE_POST_SORT'
+export const CHANGE_COMMENT_SORT = 'CHANGE_COMMENT_SORT'
 
 export const receiveCategories = categories => ({
   type: RECEIVE_CATEGORIES,
   categories
+});
+
+export const writePost = ({ id, timestamp, title, body, author, category, voteScore, deleted }) => ({
+  type: WRITE_POST,
+  post: {
+    id,
+    timestamp,
+    title,
+    body,
+    author,
+    category,
+    voteScore,
+    deleted
+  }
+});
+
+export const writeComment =  ({ id, timestamp, body, author, parentId, parentDeleted, voteScore, deleted }) => ({
+  type: WRITE_COMMENT,
+  comment: {
+    id,
+    timestamp,
+    body,
+    author,
+    parentId,
+    parentDeleted,
+    voteScore,
+    deleted
+  }
 });
 
 export const requestCategories = () => dispatch => (
@@ -28,6 +55,15 @@ export const requestComments = (parentId) => dispatch => (
     .then(comments => comments.forEach(comment => dispatch(writeComment(comment)) ))
 );
 
+export const requestPosting = (id) => dispatch => (
+  API
+    .getPost(id)
+    .then(post => {
+      dispatch(writePost(post));
+      dispatch(requestComments(post.id));
+    })
+);
+
 export const requestPostings = () => dispatch => (
   API
     .getAllPosts()
@@ -36,20 +72,6 @@ export const requestPostings = () => dispatch => (
       dispatch(requestComments(post.id));
     }))
 );
-
-export function writePost ({ id, timestamp, title, body, author, category, voteScore, deleted }) {
-  return {
-    type: WRITE_POST,
-    id,
-    timestamp,
-    title,
-    body,
-    author,
-    category,
-    voteScore,
-    deleted
-  }
-}
 
 /*export function editPost ({ id, title, body }) {
   return {
@@ -67,30 +89,11 @@ export function deletePost ({ id }) {
   }
 }*/
 
-export const receiveVotePost = post => ({
-  type: RECEIVE_VOTE_POST,
-  post
-});
-
 export const sendVotePost = ({ id, vote }) => dispatch => (
   API
     .votePost(id, vote)
-    .then(post => dispatch(receiveVotePost(post)))
+    .then(post => dispatch(writePost(post)))
 );
-
-export function writeComment ({ id, timestamp, body, author, parentId, parentDeleted, voteScore, deleted }) {
-  return {
-    type: WRITE_COMMENT,
-    id,
-    timestamp,
-    body,
-    author,
-    parentId,
-    parentDeleted,
-    voteScore,
-    deleted
-  }
-}
 
 /*export function editComment ({ id, timestamp, body }) {
   return {
@@ -106,18 +109,20 @@ export function deleteComment ({ id }) {
     type: DELETE_COMMENT,
     id
   }
-}
+}*/
 
-export function voteComment ({ id, vote }) {
-  return {
-    type: VOTE_COMMENT,
-    id,
-    vote
-  }
-}
-*/
+export const sendVoteComment = ({ id, vote }) => dispatch => (
+  API
+    .voteComment(id, vote)
+    .then(comment => dispatch(writeComment(comment)))
+);
 
-export const changeSort = criteria => ({
-  type: CHANGE_SORT,
+export const changePostSort = criteria => ({
+  type: CHANGE_POST_SORT,
+  criteria
+});
+
+export const changeCommentSort = criteria => ({
+  type: CHANGE_COMMENT_SORT,
   criteria
 });

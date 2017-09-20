@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { requestPostings, changeSort } from '../actions';
+import { requestPostings, changePostSort } from '../actions';
 import humanReadableTime from '../utils/humanReadableTime';
+import commentsToArray from '../utils/commentsToArray';
 import VoteScore from './VoteScore';
 import sortBy from 'sort-by';
+import { Link } from 'react-router';
 import AddIcon from 'react-icons/lib/fa/plus';
 import UserIcon from 'react-icons/lib/fa/user';
 import CommentIcon from 'react-icons/lib/fa/comment';
@@ -60,20 +62,20 @@ class PostList extends Component {
                   <span className="meta__where">Category: <a href={'/'+post.category}>{post.category}</a></span>
                   <time className="meta__when">{humanReadableTime(post.timestamp)}</time>
                 </p>
-                <a href={'/'+post.category+'/'+post.id} className="posting__link">
+                <Link to={'/'+post.category+'/'+post.id} className="posting__link">
                   <h1 className="posting__title">{post.title}</h1>
                   <p className="posting__body">{post.body}</p>
-                </a>
-                <div className="posting__modify">
-                  <button className="posting__modify-btn posting__modify-btn--edit">
+                </Link>
+                <div className="entry__modify">
+                  <button className="entry__modify-btn entry__modify-btn--edit">
                     <EditIcon size={16} /> edit
                   </button>
-                  <button className="posting__modify-btn posting__modify-btn--del">
+                  <button className="entry__modify-btn entry__modify-btn--del">
                     <DeleteIcon size={16} /> delete
                   </button>
                 </div>
                 <div className="posting__reactions">
-                  <VoteScore isPost='true' entryId={post.id} />
+                  <VoteScore isPost='true' entryId={post.id} score={post.voteScore} />
                   <p className="posting__comment-count" title={'Comments: '+post.commentList.length}>
                     {post.commentList.length}
                     <CommentIcon size={16} className="posting__comment-icon" alt="Comments:" />
@@ -90,22 +92,19 @@ class PostList extends Component {
 
 function mapStateToProps({ posts, comments, postSorting }, ownProps) {
   const { filter } = ownProps;
-  const commentsAsArray = Object.keys(comments).map(commentId => {
-    return {
-      id: commentId,
-      ...comments[commentId]
-    }
-  });
+  const commentsAsArray = commentsToArray(comments);
 
   return {
-    posts: Object.keys(posts).map(postId => {
-      return {
-        id: postId,
-        ...posts[postId],
-        commentList: commentsAsArray
-                      .filter(comment => comment.parentId === postId)
-                      .map(comment => comment.id)
-      }
+    posts: Object.keys(posts)
+      .filter(postId => posts[postId].deleted === false)
+      .map(postId => {
+        return {
+          id: postId,
+          ...posts[postId],
+          commentList: commentsAsArray
+                        .filter(comment => comment.parentId === postId)
+                        .map(comment => comment.id)
+        }
     }),
     sorting: postSorting,
     filter: filter
@@ -115,7 +114,7 @@ function mapStateToProps({ posts, comments, postSorting }, ownProps) {
 function mapDispatchToProps(dispatch) {
   return {
     requestPosts: () => dispatch(requestPostings()),
-    changeSorting: (criteria) => dispatch(changeSort(criteria))
+    changeSorting: (criteria) => dispatch(changePostSort(criteria))
   }
 }
 

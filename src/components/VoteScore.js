@@ -11,11 +11,11 @@ class VoteScore extends Component {
 
     return (
       <div className="votescore">
-        <button onClick={() => vote({ id: entryId, vote: 'downVote', isPost: isPost })} className="votescore__edit votescore__edit--down">
+        <button onClick={() => vote({ id: entryId, vote: 'downVote', isPost })} className="votescore__edit votescore__edit--down">
           <MinusIcon size={14} />
         </button>
         <span className="votescore__score">{score}</span>
-        <button onClick={() => vote({ id: entryId, vote: 'upVote', isPost: isPost })} className="votescore__edit votescore__edit--up">
+        <button onClick={() => vote({ id: entryId, vote: 'upVote', isPost })} className="votescore__edit votescore__edit--up">
           <PlusIcon size={14} />
         </button>
       </div>
@@ -23,13 +23,14 @@ class VoteScore extends Component {
   }
 }
 
-function mapStateToProps({ posts, comments }, ownProps) {
-  const { entryId, isPost } = ownProps;
+// eslint-disable-next-line
+function mapStateToProps({}, ownProps) {
+  const { entryId, score, isPost } = ownProps;
 
   return {
-    score: isPost ? posts[entryId].voteScore : comments[entryId].voteScore,
-    entryId: entryId,
-    isPost: isPost
+    score,
+    entryId,
+    isPost
   }
 }
 
