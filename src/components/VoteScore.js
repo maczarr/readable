@@ -1,11 +1,21 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { sendVotePost, sendVoteComment } from '../actions';
+import { sendVotePost, sendVoteComment, requestPosting, requestComment } from '../actions';
 import PlusIcon from 'react-icons/lib/fa/plus';
 import MinusIcon from 'react-icons/lib/fa/minus';
 import '../styling/votescore.css';
 
 class VoteScore extends Component {
+  componentWillMount() {
+    const { posts, comments, entryId, isPost, requestPost, requestComm } = this.props;
+
+    if (isPost && typeof(posts[entryId]) === 'undefined') {
+      requestPost(entryId);
+    } else if (!isPost && typeof(comments[entryId]) === 'undefined') {
+      requestComm(entryId);
+    }
+  }
+
   render() {
     const { vote, score, entryId, isPost } = this.props;
 
@@ -23,19 +33,34 @@ class VoteScore extends Component {
   }
 }
 
-// eslint-disable-next-line
-function mapStateToProps({}, ownProps) {
-  const { entryId, score, isPost } = ownProps;
+function mapStateToProps({ posts, comments }, ownProps) {
+  const { entryId, isPost } = ownProps;
+
+  function getVoteScore(entryId, isPost, posts, comments) {
+    if (isPost && typeof(posts[entryId]) !== 'undefined') {
+      return posts[entryId].voteScore;
+    }
+    else if (typeof(comments[entryId]) !== 'undefined') {
+      return comments[entryId].voteScore
+    }
+    else {
+      return 1;
+    }
+  }
 
   return {
-    score,
+    score: getVoteScore(entryId, isPost, posts, comments),
     entryId,
-    isPost
+    isPost,
+    posts,
+    comments
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
+    requestComm: (id) => dispatch(requestComment(id)),
+    requestPost: (id) => dispatch(requestPosting(id)),
     vote: (data) => data.isPost ? dispatch(sendVotePost(data)) : dispatch(sendVoteComment(data))
   }
 }

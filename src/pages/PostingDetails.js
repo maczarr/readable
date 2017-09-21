@@ -15,11 +15,13 @@ import '../styling/commentlist.css';
 
 class PostingDetails extends Component {
   componentWillMount() {
-    this.props.requestPost(this.props.post.id);
+    const { requestPost, post } = this.props;
+
+    requestPost(post.id);
   }
 
   render() {
-    const { post, sorting, changeSorting } = this.props
+    const { post, sorting, changeSorting } = this.props;
 
     if (post.deleted === true) {
       return <p>No Post found.</p>
@@ -47,7 +49,7 @@ class PostingDetails extends Component {
             </button>
           </div>
           <div className="posting__reactions">
-            <VoteScore isPost='true' entryId={post.id} score={post.voteScore} />
+            <VoteScore isPost='true' entryId={post.id} />
             <p className="posting__comment-count" title={'Comments: '+post.commentList.length}>
               {post.commentList.length}
               <CommentIcon size={16} className="posting__comment-icon" alt="Comments:" />
@@ -83,7 +85,7 @@ class PostingDetails extends Component {
                   {comment.body}
                 </p>
                 <div className="comment__interactions">
-                  <VoteScore entryId={comment.id} score={comment.voteScore} />
+                  <VoteScore entryId={comment.id} />
 
                   <div className="entry__modify entry__modify--comment">
                     <button className="entry__modify-btn entry__modify-btn--light entry__modify-btn--edit">

@@ -16,10 +16,12 @@ import '../styling/postlist.css';
 
 class PostList extends Component {
   componentWillMount() {
-    if (typeof(this.props.filter) === 'string' && this.props.filter.length > 0){
-      this.props.requestCatPosts(this.props.filter);
+    const { requestCatPosts, requestAllPosts, filter } = this.props;
+
+    if (typeof(filter) === 'string' && filter.length > 0){
+      requestCatPosts(filter);
     } else {
-      this.props.requestAllPosts();
+      requestAllPosts();
     }
   }
 
@@ -77,7 +79,7 @@ class PostList extends Component {
                   </button>
                 </div>
                 <div className="posting__reactions">
-                  <VoteScore isPost='true' entryId={post.id} score={post.voteScore} />
+                  <VoteScore isPost='true' entryId={post.id} />
                   <p className="posting__comment-count" title={'Comments: '+post.commentList.length}>
                     {post.commentList.length}
                     <CommentIcon size={16} className="posting__comment-icon" alt="Comments:" />

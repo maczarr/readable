@@ -64,6 +64,12 @@ export const requestPosting = (id) => dispatch => (
     })
 );
 
+export const requestComment = (id) => dispatch => (
+  API
+    .getComment(id)
+    .then(comment => dispatch(writeComment(comment)))
+);
+
 export const requestCatsPostings = (category) => dispatch => (
   API
     .getCategoriesPosts(category)
