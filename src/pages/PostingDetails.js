@@ -27,7 +27,7 @@ class PostingDetails extends Component {
 
     return (
       <div className="PostingDetails">
-        <article className="posting">
+        <article className="posting posting--single">
           <p className="meta">
             <span className="meta__who">
               <UserIcon size={14} className="meta__user-icon" />
@@ -56,7 +56,7 @@ class PostingDetails extends Component {
         </article>
 
         <aside className="post-comments">
-          <h2 className="comments-title">Comments</h2>
+          <h2 className="comments-title">Comments ({post.commentList.length})</h2>
 
           <div className="list-sort">
             <label className="list-sort__label" htmlFor="list-sort__criteria">Sort By:</label>

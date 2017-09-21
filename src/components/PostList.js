@@ -63,12 +63,10 @@ class PostList extends Component {
                     <UserIcon size={14} className="meta__user-icon" />
                     {post.author}
                   </span>
-                  <span className="meta__where">Category: <a href={'/'+post.category}>{post.category}</a></span>
                   <time className="meta__when">{humanReadableTime(post.timestamp)}</time>
                 </p>
                 <Link to={'/'+post.category+'/'+post.id} className="posting__link">
                   <h1 className="posting__title">{post.title}</h1>
-                  <p className="posting__body">{post.body}</p>
                 </Link>
                 <div className="entry__modify">
                   <button className="entry__modify-btn entry__modify-btn--edit">
