@@ -64,7 +64,16 @@ export const requestPosting = (id) => dispatch => (
     })
 );
 
-export const requestPostings = () => dispatch => (
+export const requestCatsPostings = (category) => dispatch => (
+  API
+    .getCategoriesPosts(category)
+    .then(posts => posts.forEach(post => {
+      dispatch(writePost(post));
+      dispatch(requestComments(post.id));
+    }))
+);
+
+export const requestAllPostings = () => dispatch => (
   API
     .getAllPosts()
     .then(posts => posts.forEach(post => {

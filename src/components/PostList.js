@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { requestPostings, changePostSort } from '../actions';
+import { requestCatsPostings, requestAllPostings, changePostSort } from '../actions';
 import humanReadableTime from '../utils/humanReadableTime';
 import commentsToArray from '../utils/commentsToArray';
 import VoteScore from './VoteScore';
@@ -16,7 +16,11 @@ import '../styling/postlist.css';
 
 class PostList extends Component {
   componentWillMount() {
-    this.props.requestPosts();
+    if (typeof(this.props.filter) === 'string' && this.props.filter.length > 0){
+      this.props.requestCatPosts(this.props.filter);
+    } else {
+      this.props.requestAllPosts();
+    }
   }
 
   render() {
@@ -113,7 +117,8 @@ function mapStateToProps({ posts, comments, postSorting }, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    requestPosts: () => dispatch(requestPostings()),
+    requestCatPosts: (category) => dispatch(requestCatsPostings(category)),
+    requestAllPosts: () => dispatch(requestAllPostings()),
     changeSorting: (criteria) => dispatch(changePostSort(criteria))
   }
 }
