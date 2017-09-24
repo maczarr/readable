@@ -1,4 +1,6 @@
 import * as API from '../utils/api.js';
+import { push } from 'react-router-redux';
+const uuidv4 = require('uuid/v4');
 
 export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES'
 export const WRITE_POST = 'WRITE_POST'
@@ -9,6 +11,7 @@ export const WRITE_COMMENT = 'WRITE_COMMENT'
 export const DELETE_COMMENT = 'DELETE_COMMENT'*/
 export const CHANGE_POST_SORT = 'CHANGE_POST_SORT'
 export const CHANGE_COMMENT_SORT = 'CHANGE_COMMENT_SORT'
+export const WRITE_EDIT_POST = 'WRITE_EDIT_POST'
 
 export const receiveCategories = categories => ({
   type: RECEIVE_CATEGORIES,
@@ -26,6 +29,16 @@ export const writePost = ({ id, timestamp, title, body, author, category, voteSc
     category,
     voteScore,
     deleted
+  }
+});
+
+export const writeEditPosting = ({ id, title, body, category }) => ({
+  type: WRITE_EDIT_POST,
+  post: {
+    id,
+    title,
+    body,
+    category
   }
 });
 
@@ -59,8 +72,18 @@ export const requestPosting = (id) => dispatch => (
   API
     .getPost(id)
     .then(post => {
-      dispatch(writePost(post));
-      dispatch(requestComments(post.id));
+      if(typeof(post.id) !== 'undefined') {
+        dispatch(writePost(post));
+        dispatch(requestComments(post.id));
+      }
+    })
+);
+
+export const requestEditPosting = (id) => dispatch => (
+  API
+    .getPost(id)
+    .then(post => {
+      dispatch(writeEditPosting(post));
     })
 );
 
@@ -88,21 +111,32 @@ export const requestAllPostings = () => dispatch => (
     }))
 );
 
-/*export function editPost ({ id, title, body }) {
-  return {
-    type: EDIT_POST,
-    id,
-    title,
-    body
-  }
-}
+export const sendPosting = ({ id = uuidv4(), timestamp = Date.now(), title, body, author, category }) => dispatch => (
+  API
+    .createPost(id, timestamp, title, body, author, category)
+    .then(post => {
+      dispatch(writePost(post));
+    })
+    .then(dispatch(push(`/${category}/${id}`)))
+);
 
-export function deletePost ({ id }) {
-  return {
-    type: DELETE_POST,
-    id
-  }
-}*/
+export const editPosting = ({ id, title, body, category }) => dispatch => (
+  API
+    .editPost(id, title, body)
+    .then(post => dispatch(writePost(post)))
+    .then(dispatch(push(`/${category}/${id}`)))
+);
+
+export const deletePosting = ( id ) => dispatch => (
+  API
+    .deletePost(id)
+    .then(post => {
+      //console.log(post)
+      dispatch(writePost(post));
+      dispatch(requestComments(post.id));
+    })
+    .then(dispatch(push('/')))
+);
 
 export const sendVotePost = ({ id, vote }) => dispatch => (
   API

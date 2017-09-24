@@ -11,6 +11,7 @@ import UserIcon from 'react-icons/lib/fa/user';
 import CommentIcon from 'react-icons/lib/fa/comment';
 import EditIcon from 'react-icons/lib/fa/pencil';
 import DeleteIcon from 'react-icons/lib/fa/trash';
+import { push } from 'react-router-redux';
 import '../styling/postlist.css';
 //import '../styling/overlaymodal.css';
 
@@ -33,7 +34,7 @@ class PostList extends Component {
       return true;
     }
 
-    const { posts, sorting, changeSorting, filter } = this.props;
+    const { posts, sorting, changeSorting, filter, goToRoute } = this.props;
     const postsFiltered = posts.filter(post => filterPosts(post, filter));
 
     if (postsFiltered.length === 0) {
@@ -52,7 +53,7 @@ class PostList extends Component {
           </select>
         </div>
 
-        <button className="posting-create">
+        <button className="cta-btn" onClick={() => goToRoute('/post/create')}>
           <AddIcon size={16} /> New Post
         </button>
 
@@ -117,6 +118,7 @@ function mapStateToProps({ posts, comments, postSorting }, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    goToRoute: (route) => dispatch(push(route)),
     requestCatPosts: (category) => dispatch(requestCatsPostings(category)),
     requestAllPosts: () => dispatch(requestAllPostings()),
     changeSorting: (criteria) => dispatch(changePostSort(criteria))

@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Startpage from './pages/Startpage';
 import PostingDetails from './pages/PostingDetails';
+import PostingCreate from './pages/PostingCreate';
+import PostingEdit from './pages/PostingEdit';
 import registerServiceWorker from './registerServiceWorker';
 import { createStore, applyMiddleware, compose } from 'redux';
 import reducers from './reducers';
@@ -37,8 +39,10 @@ ReactDOM.render(
     <div className="app">
       <Router history={history}>
         <Route path="/" component={Startpage}/>
+        <Route path="/post/create" component={PostingCreate}/>
         <Route path="/:category" component={Startpage}/>
         <Route path="/:category/:id" component={PostingDetails}/>
+        <Route path="/:category/:id/edit" component={PostingEdit}/>
       </Router>
     </div>
   </Provider>, document.getElementById('root')

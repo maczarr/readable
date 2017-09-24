@@ -7,21 +7,6 @@
   margin-right: 0.5rem;
 }
 
-.posting-create {
-  background-color: #0b0;
-  color: #fff;
-  font-size: 1.2rem;
-  line-height: 1;
-  padding: 0.5rem 0.7rem;
-  border-width: 0;
-  margin: 0 0 2rem;
-  cursor: pointer;
-}
-
-.posting-create:hover {
-  background-color: #0a0;
-}
-
 .post-list {
   list-style-type: none;
   margin: 0;

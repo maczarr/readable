@@ -11,7 +11,8 @@ import {
 /*  EDIT_COMMENT,
   DELETE_COMMENT,*/
   CHANGE_POST_SORT,
-  CHANGE_COMMENT_SORT
+  CHANGE_COMMENT_SORT,
+  WRITE_EDIT_POST
 } from '../actions'
 
 function categories(state = [], action) {
@@ -43,6 +44,29 @@ function posts(state = {}, action) {
           "voteScore": post.voteScore,
           "deleted": post.deleted
         }
+      }
+    default:
+      return state;
+  }
+}
+
+const initialEditPost = {
+  id: '',
+  title: '',
+  body: '',
+  category: ''
+}
+
+function postToBeEdited(state = initialEditPost, action) {
+  switch(action.type) {
+    case WRITE_EDIT_POST:
+      const { post } = action;
+
+      return {
+        "id": post.id,
+        "title": post.title,
+        "body": post.body,
+        "category": post.category,
       }
     default:
       return state;
@@ -101,5 +125,6 @@ export default combineReducers({
   comments,
   postSorting,
   commentSorting,
+  postToBeEdited,
   routing: routerReducer
 });

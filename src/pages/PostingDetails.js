@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { requestPosting, changeCommentSort } from '../actions';
+import { requestPosting, changeCommentSort, deletePosting } from '../actions';
 import { connect } from 'react-redux';
 import humanReadableTime from '../utils/humanReadableTime';
 import commentsToArray from '../utils/commentsToArray';
 import VoteScore from '../components/VoteScore';
 import sortBy from 'sort-by';
+import { push } from 'react-router-redux';
 import AddIcon from 'react-icons/lib/fa/plus';
 import UserIcon from 'react-icons/lib/fa/user';
 import CommentIcon from 'react-icons/lib/fa/comment';
@@ -21,9 +22,9 @@ class PostingDetails extends Component {
   }
 
   render() {
-    const { post, sorting, changeSorting } = this.props;
+    const { post, sorting, changeSorting, goToRoute, deletePost } = this.props;
 
-    if (post.deleted === true) {
+    if (post.deleted === true || typeof(post.title) === 'undefined') {
       return <p>No Post found.</p>
     }
 
@@ -41,10 +42,10 @@ class PostingDetails extends Component {
           <h1 className="posting__title">{post.title}</h1>
           <p className="posting__body">{post.body}</p>
           <div className="entry__modify">
-            <button className="entry__modify-btn entry__modify-btn--edit">
+            <button className="entry__modify-btn entry__modify-btn--edit" onClick={() => goToRoute('/'+post.category+'/'+post.id+'/edit')}>
               <EditIcon size={16} /> edit
             </button>
-            <button className="entry__modify-btn entry__modify-btn--del">
+            <button className="entry__modify-btn entry__modify-btn--del" onClick={() => deletePost(post.id)}>
               <DeleteIcon size={16} /> delete
             </button>
           </div>
@@ -60,17 +61,19 @@ class PostingDetails extends Component {
         <aside className="post-comments">
           <h2 className="comments-title">Comments ({post.commentList.length})</h2>
 
-          <div className="list-sort">
-            <label className="list-sort__label" htmlFor="list-sort__criteria">Sort By:</label>
-            <select value={sorting} id="list-sort__criteria" onChange={(event) => changeSorting(event.target.value)}>
-              <option value="-voteScore">score (highest first)</option>
-              <option value="voteScore">score (lowest first)</option>
-              <option value="-timestamp">time (newest first)</option>
-              <option value="timestamp">time (oldest first)</option>
-            </select>
-          </div>
+          {post.commentList.length > 0 && (
+            <div className="list-sort">
+              <label className="list-sort__label" htmlFor="list-sort__criteria">Sort By:</label>
+              <select value={sorting} id="list-sort__criteria" onChange={(event) => changeSorting(event.target.value)}>
+                <option value="-voteScore">score (highest first)</option>
+                <option value="voteScore">score (lowest first)</option>
+                <option value="-timestamp">time (newest first)</option>
+                <option value="timestamp">time (oldest first)</option>
+              </select>
+            </div>
+          )}
 
-          <button className="comment-create">
+          <button className="cta-btn cta-btn--comments">
             <AddIcon size={16} /> New Comment
           </button>
 
@@ -121,8 +124,10 @@ function mapStateToProps({ posts, comments, commentSorting }, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    goToRoute: (route) => dispatch(push(route)),
     requestPost: (id) => dispatch(requestPosting(id)),
-    changeSorting: (criteria) => dispatch(changeCommentSort(criteria))
+    changeSorting: (criteria) => dispatch(changeCommentSort(criteria)),
+    deletePost: (id) => dispatch(deletePosting(id))
   }
 }
 
