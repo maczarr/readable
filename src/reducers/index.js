@@ -1,18 +1,17 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
-//import { getAllPosts } from '../utils/api.js';
 
 import {
   RECEIVE_CATEGORIES,
   WRITE_POST,
-/*  EDIT_POST,
-  DELETE_POST,*/
   WRITE_COMMENT,
-/*  EDIT_COMMENT,
-  DELETE_COMMENT,*/
   CHANGE_POST_SORT,
   CHANGE_COMMENT_SORT,
-  WRITE_EDIT_POST
+  WRITE_EDIT_POST,
+  RESET_EDIT_POST,
+  WRITE_EDIT_COMMENT,
+  RESET_EDIT_COMMENT,
+  SWITCH_FORM_VISIBILITY
 } from '../actions'
 
 function categories(state = [], action) {
@@ -68,6 +67,29 @@ function postToBeEdited(state = initialEditPost, action) {
         "body": post.body,
         "category": post.category,
       }
+    case RESET_EDIT_POST:
+      return initialEditPost;
+    default:
+      return state;
+  }
+}
+
+const initialEditComment = {
+  id: '',
+  body: ''
+}
+
+function commentToBeEdited(state = initialEditComment, action) {
+  switch(action.type) {
+    case WRITE_EDIT_COMMENT:
+      const { comment } = action;
+
+      return {
+        "id": comment.id,
+        "body": comment.body
+      }
+    case RESET_EDIT_COMMENT:
+      return initialEditComment;
     default:
       return state;
   }
@@ -119,6 +141,17 @@ function commentSorting(state = '-voteScore', action) {
   }
 }
 
+function commentFormVisible(state = false, action) {
+  const { visible } = action;
+
+  switch(action.type) {
+    case SWITCH_FORM_VISIBILITY:
+      return visible;
+    default:
+     return state;
+  }
+}
+
 export default combineReducers({
   categories,
   posts,
@@ -126,5 +159,7 @@ export default combineReducers({
   postSorting,
   commentSorting,
   postToBeEdited,
+  commentToBeEdited,
+  commentFormVisible,
   routing: routerReducer
 });

@@ -28,10 +28,18 @@ a:hover {
   line-height: 1;
   padding: 0.5rem 0.7rem;
   border-width: 0;
-  margin: 0 0 2rem;
+  margin: 0 0 1rem;
   cursor: pointer;
 }
 
 .cta-btn:hover {
   background-color: #0a0;
+}
+
+.cta-btn--cancel {
+  background-color: #bbb;
+}
+
+.cta-btn--cancel:hover {
+  background-color: #aaa;
 }

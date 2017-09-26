@@ -4,6 +4,7 @@ import Startpage from './pages/Startpage';
 import PostingDetails from './pages/PostingDetails';
 import PostingCreate from './pages/PostingCreate';
 import PostingEdit from './pages/PostingEdit';
+import CommentEdit from './pages/CommentEdit';
 import registerServiceWorker from './registerServiceWorker';
 import { createStore, applyMiddleware, compose } from 'redux';
 import reducers from './reducers';
@@ -43,6 +44,7 @@ ReactDOM.render(
         <Route path="/:category" component={Startpage}/>
         <Route path="/:category/:id" component={PostingDetails}/>
         <Route path="/:category/:id/edit" component={PostingEdit}/>
+        <Route path="/:category/:id/comments/:commentId/edit" component={CommentEdit}/>
       </Router>
     </div>
   </Provider>, document.getElementById('root')

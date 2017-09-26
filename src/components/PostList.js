@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { requestCatsPostings, requestAllPostings, changePostSort } from '../actions';
+import { requestCatsPostings, requestAllPostings, changePostSort, deletePosting } from '../actions';
 import humanReadableTime from '../utils/humanReadableTime';
 import commentsToArray from '../utils/commentsToArray';
 import VoteScore from './VoteScore';
@@ -34,7 +34,7 @@ class PostList extends Component {
       return true;
     }
 
-    const { posts, sorting, changeSorting, filter, goToRoute } = this.props;
+    const { posts, sorting, changeSorting, filter, goToRoute, deletePost } = this.props;
     const postsFiltered = posts.filter(post => filterPosts(post, filter));
 
     if (postsFiltered.length === 0) {
@@ -72,10 +72,10 @@ class PostList extends Component {
                   <h1 className="posting__title">{post.title}</h1>
                 </Link>
                 <div className="entry__modify">
-                  <button className="entry__modify-btn entry__modify-btn--edit">
+                  <button className="entry__modify-btn entry__modify-btn--edit" onClick={() => goToRoute('/'+post.category+'/'+post.id+'/edit')}>
                     <EditIcon size={16} /> edit
                   </button>
-                  <button className="entry__modify-btn entry__modify-btn--del">
+                  <button className="entry__modify-btn entry__modify-btn--del" onClick={() => deletePost(post.id)}>
                     <DeleteIcon size={16} /> delete
                   </button>
                 </div>
@@ -121,7 +121,8 @@ function mapDispatchToProps(dispatch) {
     goToRoute: (route) => dispatch(push(route)),
     requestCatPosts: (category) => dispatch(requestCatsPostings(category)),
     requestAllPosts: () => dispatch(requestAllPostings()),
-    changeSorting: (criteria) => dispatch(changePostSort(criteria))
+    changeSorting: (criteria) => dispatch(changePostSort(criteria)),
+    deletePost: (id) => dispatch(deletePosting(id))
   }
 }
 

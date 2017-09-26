@@ -73,14 +73,14 @@ export const getPostComments = (id) =>
     .then(res => res.json())
     .then(data => data)
 
-export const createComment = (id, timestamp, body, owner, parentId) =>
+export const createComment = (id, timestamp, body, author, parentId) =>
   fetch(`${api}/comments`, {
     method: 'POST',
     headers: {
       ...headers,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ id, timestamp, body, owner, parentId })
+    body: JSON.stringify({ id, timestamp, body, author, parentId })
   }).then(res => res.json())
 
 export const getComment = (id) =>

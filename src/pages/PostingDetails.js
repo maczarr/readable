@@ -1,11 +1,19 @@
 import React, { Component } from 'react';
-import { requestPosting, changeCommentSort, deletePosting } from '../actions';
+import {
+  requestPosting,
+  changeCommentSort,
+  deletePosting,
+  sendCommentary,
+  deleteCommentary,
+  switchCommentFormVisibility
+} from '../actions';
 import { connect } from 'react-redux';
 import humanReadableTime from '../utils/humanReadableTime';
 import commentsToArray from '../utils/commentsToArray';
 import VoteScore from '../components/VoteScore';
 import sortBy from 'sort-by';
 import { push } from 'react-router-redux';
+import serializeForm from 'form-serialize';
 import AddIcon from 'react-icons/lib/fa/plus';
 import UserIcon from 'react-icons/lib/fa/user';
 import CommentIcon from 'react-icons/lib/fa/comment';
@@ -13,6 +21,7 @@ import EditIcon from 'react-icons/lib/fa/pencil';
 import DeleteIcon from 'react-icons/lib/fa/trash';
 import '../styling/postlist.css';
 import '../styling/commentlist.css';
+import '../styling/commentwrite.css';
 
 class PostingDetails extends Component {
   componentWillMount() {
@@ -21,8 +30,20 @@ class PostingDetails extends Component {
     requestPost(post.id);
   }
 
+  componentWillUnmount() {
+    this.props.switchFormVisibility(false);
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    const values = serializeForm(e.target, { hash: true });
+    this.props.sendComment(values);
+    e.target.reset();
+    this.props.switchFormVisibility(false);
+  }
+
   render() {
-    const { post, sorting, changeSorting, goToRoute, deletePost } = this.props;
+    const { post, sorting, changeSorting, goToRoute, deletePost, deleteComment, commentFormVisible, switchFormVisibility } = this.props;
 
     if (post.deleted === true || typeof(post.title) === 'undefined') {
       return <p>No Post found.</p>
@@ -73,9 +94,29 @@ class PostingDetails extends Component {
             </div>
           )}
 
-          <button className="cta-btn cta-btn--comments">
+          <button className="cta-btn cta-btn--comments" onClick={() => switchFormVisibility(true)}>
             <AddIcon size={16} /> New Comment
           </button>
+
+          {commentFormVisible && (
+            <form className="comment-write comment-write--create" onSubmit={this.handleSubmit}>
+              <label htmlFor="comment-write__author" className="comment-write__label">Your Name</label>
+              <input type="text" name="author" className="comment-write__text comment-write__text--author" id="comment-write__author" required/>
+
+              <label htmlFor="comment-write__body" className="comment-write__label">Your Comment</label>
+              <textarea id="comment-write__body" name="body" className="comment-write__text comment-write__text--body" required></textarea>
+
+              <button className="cta-btn">
+                save
+              </button>
+
+              <button className="cta-btn cta-btn--cancel" onClick={() => switchFormVisibility(false)}>
+                cancel
+              </button>
+
+              <input type="hidden" name="parentId" value={post.id}/>
+            </form>
+          )}
 
           <ol className="comments">
             {post.commentList.sort(sortBy(sorting)).map(comment => (
@@ -91,10 +132,10 @@ class PostingDetails extends Component {
                   <VoteScore entryId={comment.id} />
 
                   <div className="entry__modify entry__modify--comment">
-                    <button className="entry__modify-btn entry__modify-btn--light entry__modify-btn--edit">
+                    <button className="entry__modify-btn entry__modify-btn--light entry__modify-btn--edit" onClick={() => goToRoute(`/${post.category}/${post.id}/comments/${comment.id}/edit`)}>
                       <EditIcon size={16} /> edit
                     </button>
-                    <button className="entry__modify-btn entry__modify-btn--light entry__modify-btn--del">
+                    <button className="entry__modify-btn entry__modify-btn--light entry__modify-btn--del" onClick={() => deleteComment(comment.id)}>
                       <DeleteIcon size={16} /> delete
                     </button>
                   </div>
@@ -108,7 +149,7 @@ class PostingDetails extends Component {
   }
 }
 
-function mapStateToProps({ posts, comments, commentSorting }, ownProps) {
+function mapStateToProps({ posts, comments, commentSorting, commentFormVisible }, ownProps) {
   const { id: postId } = ownProps.params;
   const commentsAsArray = commentsToArray(comments);
 
@@ -116,9 +157,10 @@ function mapStateToProps({ posts, comments, commentSorting }, ownProps) {
     post: {
       id: postId,
       ...posts[postId],
-      commentList: commentsAsArray.filter(comment => comment.parentId === postId)
+      commentList: commentsAsArray.filter(comment => !comment.deleted && comment.parentId === postId)
     },
-    sorting: commentSorting
+    sorting: commentSorting,
+    commentFormVisible
   }
 }
 
@@ -127,7 +169,10 @@ function mapDispatchToProps(dispatch) {
     goToRoute: (route) => dispatch(push(route)),
     requestPost: (id) => dispatch(requestPosting(id)),
     changeSorting: (criteria) => dispatch(changeCommentSort(criteria)),
-    deletePost: (id) => dispatch(deletePosting(id))
+    deletePost: (id) => dispatch(deletePosting(id)),
+    sendComment: (data) => dispatch(sendCommentary(data)),
+    deleteComment: (id) => dispatch(deleteCommentary(id)),
+    switchFormVisibility: (visible) => dispatch(switchCommentFormVisibility(visible))
   }
 }
 

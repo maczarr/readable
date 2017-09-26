@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { requestEditPosting, editPosting, writeEditPosting } from '../actions';
+import { requestEditPosting, editPosting, writeEditPosting, resetEditPost } from '../actions';
 import { connect } from 'react-redux';
 import serializeForm from 'form-serialize';
 import '../styling/posting-ced.css';
@@ -9,6 +9,10 @@ class PostingEdit extends Component {
     const { requestEditPost, id } = this.props;
 
     requestEditPost(id);
+  }
+
+  componentWillUnmount() {
+    this.props.resetEditForm();
   }
 
   handleSubmit = (e) => {
@@ -61,7 +65,8 @@ function mapDispatchToProps(dispatch) {
   return {
     requestEditPost: (id) => dispatch(requestEditPosting(id)),
     editPost: (data) => dispatch(editPosting(data)),
-    writeEditPost: (data) => dispatch(writeEditPosting(data))
+    writeEditPost: (data) => dispatch(writeEditPosting(data)),
+    resetEditForm: () => dispatch(resetEditPost())
   }
 }
 
