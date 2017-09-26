@@ -13,7 +13,6 @@ import EditIcon from 'react-icons/lib/fa/pencil';
 import DeleteIcon from 'react-icons/lib/fa/trash';
 import { push } from 'react-router-redux';
 import '../styling/postlist.css';
-//import '../styling/overlaymodal.css';
 
 class PostList extends Component {
   componentWillMount() {

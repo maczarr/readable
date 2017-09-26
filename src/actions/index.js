@@ -4,11 +4,7 @@ const uuidv4 = require('uuid/v4');
 
 export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES'
 export const WRITE_POST = 'WRITE_POST'
-/*export const EDIT_POST = 'EDIT_POST'
-export const DELETE_POST = 'DELETE_POST'*/
 export const WRITE_COMMENT = 'WRITE_COMMENT'
-/*export const EDIT_COMMENT = 'EDIT_COMMENT'
-export const DELETE_COMMENT = 'DELETE_COMMENT'*/
 export const CHANGE_POST_SORT = 'CHANGE_POST_SORT'
 export const CHANGE_COMMENT_SORT = 'CHANGE_COMMENT_SORT'
 export const WRITE_EDIT_POST = 'WRITE_EDIT_POST'
@@ -159,7 +155,6 @@ export const deletePosting = ( id ) => dispatch => (
   API
     .deletePost(id)
     .then(post => {
-      //console.log(post)
       dispatch(writePost(post));
       dispatch(requestComments(post.id));
     })
@@ -194,22 +189,6 @@ export const sendVotePost = ({ id, vote }) => dispatch => (
     .votePost(id, vote)
     .then(post => dispatch(writePost(post)))
 );
-
-/*export function editComment ({ id, timestamp, body }) {
-  return {
-    type: EDIT_COMMENT,
-    id,
-    timestamp,
-    body
-  }
-}
-
-export function deleteComment ({ id }) {
-  return {
-    type: DELETE_COMMENT,
-    id
-  }
-}*/
 
 export const sendVoteComment = ({ id, vote }) => dispatch => (
   API
