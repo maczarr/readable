@@ -84,7 +84,6 @@ class PostList extends Component {
                       <UserIcon size={14} className="meta__user-icon" />
                       {post.author}
                     </span>
-                    <span className="meta__where">Category: <Link to={'/'+post.category}>{post.category}</Link></span>
                     <time className="meta__when">{humanReadableTime(post.timestamp)}</time>
                   </p>
                   <Link to={'/'+post.category+'/'+post.id} className="posting__link">
