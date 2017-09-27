@@ -14,6 +14,7 @@ import {
   SWITCH_FORM_VISIBILITY
 } from '../actions'
 
+// Reducer for categories
 function categories(state = [], action) {
   const { categories } = action;
 
@@ -25,6 +26,7 @@ function categories(state = [], action) {
   }
 }
 
+// Reducer for posts
 function posts(state = {}, action) {
   switch(action.type) {
     case WRITE_POST:
@@ -56,6 +58,7 @@ const initialEditPost = {
   category: ''
 }
 
+// Reducer for the post-edit form
 function postToBeEdited(state = initialEditPost, action) {
   switch(action.type) {
     case WRITE_EDIT_POST:
@@ -79,6 +82,7 @@ const initialEditComment = {
   body: ''
 }
 
+// Reducer for comment-edit form
 function commentToBeEdited(state = initialEditComment, action) {
   switch(action.type) {
     case WRITE_EDIT_COMMENT:
@@ -95,6 +99,7 @@ function commentToBeEdited(state = initialEditComment, action) {
   }
 }
 
+// Reducer for comments
 function comments(state = {}, action) {
   switch(action.type) {
     case WRITE_COMMENT:
@@ -119,6 +124,7 @@ function comments(state = {}, action) {
   }
 }
 
+// Reducer for sorting the posts
 function postSorting(state = '-voteScore', action) {
   const { criteria } = action;
 
@@ -130,6 +136,7 @@ function postSorting(state = '-voteScore', action) {
   }
 }
 
+// Reducer for sorting the comments
 function commentSorting(state = '-voteScore', action) {
   const { criteria } = action;
 
@@ -141,6 +148,7 @@ function commentSorting(state = '-voteScore', action) {
   }
 }
 
+// Reducer for switching visibility of the add-comment form
 function commentFormVisible(state = false, action) {
   const { visible } = action;
 

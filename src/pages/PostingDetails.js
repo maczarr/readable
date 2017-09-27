@@ -41,16 +41,23 @@ class PostingDetails extends Component {
     router: PropTypes.object.isRequired
   }
 
+  // If the component did mount it needs to request the posting
   componentDidMount() {
     const { requestPost, post } = this.props;
 
     requestPost(post.id);
   }
 
+  // The comment-form gets hidden again, after leaving this page
   componentWillUnmount() {
     this.props.switchFormVisibility(false);
   }
 
+  /*
+   * Function for handling the submit of the comment-form
+   * After the data is send the form gets reset and closed
+   * so it is tidy for a possible new comment.
+   */
   handleSubmit = (e) => {
     e.preventDefault();
     const values = serializeForm(e.target, { hash: true });
@@ -182,6 +189,13 @@ function mapStateToProps({ posts, comments, commentSorting, commentFormVisible }
   const { id: postId } = ownProps.params;
   const commentsAsArray = commentsToArray(comments);
 
+  /*
+   * The post-object gets its own id as key for the props and
+   * the post-object is getting a new key `commentList` with
+   * the IDs of its comments. The comments are getting filtered
+   * aswell so there are no deleted ones left and the
+   * comment-counter is accurate.
+   */
   return {
     post: {
       id: postId,

@@ -16,6 +16,11 @@ class Header extends Component {
 
     return (
       <header className="readable-header">
+        {/*
+          * The header has the logo pointing to the startpage and
+          * and a left-arrow pointing to the previous page.
+          * The Back-Functionality only gets hidden on the startpage.
+          */}
         { routing.locationBeforeTransitions.pathname !== '/' && (
           <button onClick={goBack} className="nav-btn-back">
             <LeftArrowIcon size={20} className="nav-btn-back__icon"/>

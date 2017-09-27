@@ -15,6 +15,7 @@ class Startpage extends Component {
     router: PropTypes.object.isRequired
   }
 
+  // The categories are getting requested for the category-choice
   componentDidMount() {
     this.props.requestCats();
   }
@@ -22,6 +23,7 @@ class Startpage extends Component {
   render() {
     const { categories, categoryFilter, router } = this.props
 
+    // If there is a category-filter but it's not a known category the user gets an info
     if (categoryFilter !== null && (categories.filter(cat => cat.name === categoryFilter).length === 0)) {
       return <p>The category „{categoryFilter}“ does not exists, sorry.</p>
     }

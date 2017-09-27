@@ -14,11 +14,13 @@ class PostingCreate extends Component {
     router: PropTypes.object.isRequired
   }
 
+  // The categories are getting requested for the drop-down form-field
   componentDidMount() {
     const { requestCats } = this.props;
     requestCats();
   }
 
+  // Function for handling the form-submit and sending the data
   handleSubmit = (e) => {
     e.preventDefault();
     const values = serializeForm(e.target, { hash: true });

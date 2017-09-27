@@ -19,22 +19,30 @@ class CommentEdit extends Component {
     router: PropTypes.object.isRequired
   }
 
+  // The comment that should get edited gets requested
   componentDidMount() {
     const { requestEditComment, commentId } = this.props;
 
     requestEditComment(commentId);
   }
 
+  /*
+   * For not having the edited comment in the state until
+   * the next comment gets edited, the form-data in the
+   * state are getting reset.
+   */
   componentWillUnmount() {
     this.props.resetEditForm();
   }
 
+  // Function to handle a permanent change to the comment
   handleSubmit = (e) => {
     e.preventDefault();
     const values = serializeForm(e.target, { hash: true });
     this.props.editComment(values);
   }
 
+  // Function to handle a change to the comment in the form
   handleChange = (e) => {
     e.preventDefault();
     const values = serializeForm(this.refs.editCommentForm, { hash: true });
@@ -43,6 +51,11 @@ class CommentEdit extends Component {
 
   render() {
     const { commentToBeEdited, category, parentId, router } = this.props;
+
+    /*
+     * The hidden category- and parentId-Fields are necessary to redirect
+     * the user back to the post-page after the comment has been changed.
+     */
 
     return (
       <div className="CommentEdit">

@@ -18,6 +18,10 @@ class VoteScore extends Component {
     score: PropTypes.number
   }
 
+  /*
+   * This component is getting used for posts and comments and calls
+   * the right request-function if the entry isn't available yet.
+   */
   componentWillMount() {
     const { posts, comments, entryId, isPost, requestPost, requestComm } = this.props;
 
@@ -48,6 +52,7 @@ class VoteScore extends Component {
 function mapStateToProps({ posts, comments }, ownProps) {
   const { entryId, isPost } = ownProps;
 
+  // This function returns the voteScore for the posts or comment
   function getVoteScore(entryId, isPost, posts, comments) {
     if (isPost && typeof(posts[entryId]) !== 'undefined') {
       return posts[entryId].voteScore;

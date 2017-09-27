@@ -17,22 +17,30 @@ class PostingEdit extends Component {
     router: PropTypes.object.isRequired
   }
 
+  // The post that should get edited gets requested
   componentDidMount() {
     const { requestEditPost, id } = this.props;
 
     requestEditPost(id);
   }
 
+  /*
+   * For not having the edited post in the state until
+   * the next post gets edited, the form-data in the
+   * state are getting reset.
+   */
   componentWillUnmount() {
     this.props.resetEditForm();
   }
 
+  // Function to handle a permanent change to the post
   handleSubmit = (e) => {
     e.preventDefault();
     const values = serializeForm(e.target, { hash: true });
     this.props.editPost(values);
   }
 
+  // Function to handle a change to the post in the form
   handleChange = (e) => {
     e.preventDefault();
     const values = serializeForm(this.refs.editForm, { hash: true });

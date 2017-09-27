@@ -27,12 +27,23 @@ class PostList extends Component {
     filter: PropTypes.string
   }
 
+  /*
+   * If the component did mount it needs to request the postings.
+   * This component beeing used on the startpage as well as on the
+   * category-pages, different functions needs to be called.
+   */
   componentDidMount() {
     const { requestCatPosts, requestAllPosts, filter } = this.props;
 
     this.requestNecessaryPosts(filter,requestCatPosts,requestAllPosts);
   }
 
+  /*
+   * The Props can change and so the posts need to be requested again.
+   * A reason for this can be that someone started on a filtered view like
+   * a category-page and than switched to the startpage, where all posts
+   * should be viewed, so the different props need to take effect.
+   */
   componentWillReceiveProps(nextProps) {
     if(this.props.filter !== nextProps.filter) {
       const { requestCatPosts, requestAllPosts, filter } = nextProps;
@@ -41,6 +52,9 @@ class PostList extends Component {
     }
   }
 
+  /* The function switching between requesting the posts for a category
+   * or for all postings.
+   */
   requestNecessaryPosts(filter,requestCatPosts,requestAllPosts) {
     if (typeof(filter) === 'string' && filter.length > 0){
       requestCatPosts(filter);
@@ -50,6 +64,11 @@ class PostList extends Component {
   }
 
   render() {
+    /*
+     * This function filters the posts for a category page. If there
+     * is no filter it'll always return `true` so nothing will be
+     * filtered out.
+     */
     function filterPosts(post, filter) {
       if (typeof(filter) === 'string' && filter.length > 0) {
         return post.category === filter;
@@ -70,6 +89,7 @@ class PostList extends Component {
           <AddIcon size={16} /> New Post
         </button>
 
+        {/* Only if there are posts the filter-mechanism should be shown.*/}
         {postsFiltered.length > 0 && (
           <div className="list-sort">
             <label className="list-sort__label" htmlFor="list-sort__criteria">Sort By:</label>
@@ -86,6 +106,7 @@ class PostList extends Component {
           <p>No Posts found.</p>
         )}
 
+        {/* Only if there are posts the list-element should be shown.*/}
         {postsFiltered.length > 0 && (
           <ol className="post-list">
             {postsFiltered.sort(sortBy(sorting)).map((post) => (
@@ -130,6 +151,15 @@ function mapStateToProps({ posts, comments, postSorting }, ownProps) {
   const { filter } = ownProps;
   const commentsAsArray = commentsToArray(comments);
 
+  /*
+   * The posts get converted from an object to an array, than
+   * filtered so there's only non-deleted posts and this lists
+   * gets processed so it returns an array with post-objects inside
+   * and the post-objects are getting a new key `commentList` with
+   * the IDs of their comments. The comments are getting filtered
+   * aswell so there are no deleted ones left and the
+   * comment-counters are accurate.
+   */
   return {
     posts: Object.keys(posts)
       .filter(postId => posts[postId].deleted === false)

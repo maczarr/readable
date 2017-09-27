@@ -1,5 +1,6 @@
 import * as API from '../utils/api.js';
 import { push } from 'react-router-redux';
+// UUID-Generator for new posts and comments
 const uuidv4 = require('uuid/v4');
 
 export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES'
@@ -26,6 +27,10 @@ export const receiveCategories = categories => ({
   categories
 });
 
+/*
+ * There's only this action for writing a post which gets called
+ * several times by other actions.
+ */
 export const writePost = ({ id, timestamp, title, body, author, category, voteScore, deleted }) => ({
   type: WRITE_POST,
   post: {
@@ -58,6 +63,10 @@ export const writeEditCommentary = ({ id, body }) => ({
   }
 });
 
+/*
+ * There's only this action for writing a comment which gets called
+ * several times by other actions.
+ */
 export const writeComment =  ({ id, timestamp, body, author, parentId, parentDeleted, voteScore, deleted }) => ({
   type: WRITE_COMMENT,
   comment: {
@@ -88,6 +97,13 @@ export const requestPosting = (id) => dispatch => (
   API
     .getPost(id)
     .then(post => {
+      /*
+       * In case a user opens a url with a wrong post-id or maybe a
+       * deleted post, the API answers with an empty object so
+       * this case has to be cleared.
+       * If everything is fine the actions for write the post and
+       * requesting the comments for that post get dispatched.
+       */
       if(typeof(post.id) !== 'undefined') {
         dispatch(writePost(post));
         dispatch(requestComments(post.id));
@@ -95,6 +111,7 @@ export const requestPosting = (id) => dispatch => (
     })
 );
 
+// The posting that should be edited gets requested
 export const requestEditPosting = (id) => dispatch => (
   API
     .getPost(id)
@@ -103,6 +120,7 @@ export const requestEditPosting = (id) => dispatch => (
     })
 );
 
+// The comment that should be edited gets requested
 export const requestEditCommentary = (commentId) => dispatch => (
   API
     .getComment(commentId)
@@ -121,6 +139,10 @@ export const requestCatsPostings = (category) => dispatch => (
   API
     .getCategoriesPosts(category)
     .then(posts => posts.forEach(post => {
+      /*
+       * For all posts the comments get requested because
+       * in every post-view are the comment-infos necessary.
+       */
       dispatch(writePost(post));
       dispatch(requestComments(post.id));
     }))
@@ -130,11 +152,16 @@ export const requestAllPostings = () => dispatch => (
   API
     .getAllPosts()
     .then(posts => posts.forEach(post => {
+      /*
+       * For all posts the comments get requested because
+       * in every post-view are the comment-infos necessary.
+       */
       dispatch(writePost(post));
       dispatch(requestComments(post.id));
     }))
 );
 
+// After a new post was created the user gets redirected to posting-page
 export const sendPosting = ({ id = uuidv4(), timestamp = Date.now(), title, body, author, category }) => dispatch => (
   API
     .createPost(id, timestamp, title, body, author, category)
@@ -155,6 +182,11 @@ export const deletePosting = ( id ) => dispatch => (
   API
     .deletePost(id)
     .then(post => {
+      /*
+       * Because comments have a prop that says if the parent-post
+       * is deleted, it is necessary to request the comments of the
+       * deleted post aswell to get the state right.
+       */
       dispatch(writePost(post));
       dispatch(requestComments(post.id));
     })

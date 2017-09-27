@@ -1,3 +1,4 @@
+// Helper function to convert a timestamp to a human readable string
 export default function humanReadableTime(timestamp) {
   function leadingZero(v) {
     return v < 10 ? '0'+v : v;
