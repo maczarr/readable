@@ -16,6 +16,7 @@ import { push } from 'react-router-redux';
 import { Link } from 'react-router';
 import serializeForm from 'form-serialize';
 import Header from '../components/Header';
+import PropTypes from 'prop-types';
 import AddIcon from 'react-icons/lib/fa/plus';
 import UserIcon from 'react-icons/lib/fa/user';
 import CommentIcon from 'react-icons/lib/fa/comment';
@@ -26,6 +27,20 @@ import '../styling/commentlist.css';
 import '../styling/commentwrite.css';
 
 class PostingDetails extends Component {
+  static propTypes = {
+    requestPost: PropTypes.func.isRequired,
+    post: PropTypes.object.isRequired,
+    switchFormVisibility: PropTypes.func.isRequired,
+    sendComment: PropTypes.func.isRequired,
+    sorting: PropTypes.string.isRequired,
+    changeSorting: PropTypes.func.isRequired,
+    goToRoute: PropTypes.func.isRequired,
+    deletePost: PropTypes.func.isRequired,
+    deleteComment: PropTypes.func.isRequired,
+    commentFormVisible: PropTypes.bool.isRequired,
+    router: PropTypes.object.isRequired
+  }
+
   componentDidMount() {
     const { requestPost, post } = this.props;
 
@@ -85,7 +100,7 @@ class PostingDetails extends Component {
             </button>
           </div>
           <div className="posting__reactions">
-            <VoteScore isPost='true' entryId={post.id} />
+            <VoteScore isPost={true} entryId={post.id} />
             <p className="posting__comment-count" title={'Comments: '+post.commentList.length}>
               {post.commentList.length}
               <CommentIcon size={16} className="posting__comment-icon" alt="Comments:" />

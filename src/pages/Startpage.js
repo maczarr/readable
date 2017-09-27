@@ -3,10 +3,18 @@ import { requestCategories } from '../actions';
 import { connect } from 'react-redux';
 import PostList from '../components/PostList';
 import Header from '../components/Header';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import '../styling/categories.css';
 
 class Startpage extends Component {
+  static propTypes = {
+    requestCats: PropTypes.func.isRequired,
+    categories: PropTypes.array.isRequired,
+    categoryFilter: PropTypes.string,
+    router: PropTypes.object.isRequired
+  }
+
   componentDidMount() {
     this.props.requestCats();
   }

@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import PropTypes from 'prop-types';
 import LeftArrowIcon from 'react-icons/lib/fa/arrow-left';
 import '../styling/header.css';
 
 class Header extends Component {
+  static propTypes = {
+    routing: PropTypes.object.isRequired,
+    goBack: PropTypes.func.isRequired
+  }
+
   render() {
     const { routing, goBack } = this.props;
 

@@ -1,11 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { sendVotePost, sendVoteComment, requestPosting, requestComment } from '../actions';
+import PropTypes from 'prop-types';
 import PlusIcon from 'react-icons/lib/fa/plus';
 import MinusIcon from 'react-icons/lib/fa/minus';
 import '../styling/votescore.css';
 
 class VoteScore extends Component {
+  static propTypes = {
+    posts: PropTypes.object.isRequired,
+    comments: PropTypes.object.isRequired,
+    entryId: PropTypes.string.isRequired,
+    isPost: PropTypes.bool,
+    requestPost: PropTypes.func.isRequired,
+    requestComm: PropTypes.func.isRequired,
+    vote: PropTypes.func.isRequired,
+    score: PropTypes.number
+  }
+
   componentWillMount() {
     const { posts, comments, entryId, isPost, requestPost, requestComm } = this.props;
 

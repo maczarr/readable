@@ -2,10 +2,18 @@ import React, { Component } from 'react';
 import { requestCategories, sendPosting } from '../actions';
 import { connect } from 'react-redux';
 import Header from '../components/Header';
+import PropTypes from 'prop-types';
 import serializeForm from 'form-serialize';
 import '../styling/posting-ced.css';
 
 class PostingCreate extends Component {
+  static propTypes = {
+    requestCats: PropTypes.func.isRequired,
+    sendPost: PropTypes.func.isRequired,
+    categories: PropTypes.array.isRequired,
+    router: PropTypes.object.isRequired
+  }
+
   componentDidMount() {
     const { requestCats } = this.props;
     requestCats();

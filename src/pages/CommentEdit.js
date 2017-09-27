@@ -2,10 +2,23 @@ import React, { Component } from 'react';
 import { requestEditCommentary, editCommentary, writeEditCommentary, resetEditComment } from '../actions';
 import { connect } from 'react-redux';
 import Header from '../components/Header';
+import PropTypes from 'prop-types';
 import serializeForm from 'form-serialize';
 import '../styling/commentwrite.css';
 
 class CommentEdit extends Component {
+  static propTypes = {
+    requestEditComment: PropTypes.func.isRequired,
+    commentId: PropTypes.string.isRequired,
+    resetEditForm: PropTypes.func.isRequired,
+    editComment: PropTypes.func.isRequired,
+    writeEditComment: PropTypes.func.isRequired,
+    commentToBeEdited: PropTypes.object.isRequired,
+    category: PropTypes.string.isRequired,
+    parentId: PropTypes.string.isRequired,
+    router: PropTypes.object.isRequired
+  }
+
   componentDidMount() {
     const { requestEditComment, commentId } = this.props;
 

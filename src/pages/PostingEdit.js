@@ -2,10 +2,21 @@ import React, { Component } from 'react';
 import { requestEditPosting, editPosting, writeEditPosting, resetEditPost } from '../actions';
 import { connect } from 'react-redux';
 import Header from '../components/Header';
+import PropTypes from 'prop-types';
 import serializeForm from 'form-serialize';
 import '../styling/posting-ced.css';
 
 class PostingEdit extends Component {
+  static propTypes = {
+    requestEditPost: PropTypes.func.isRequired,
+    id: PropTypes.string.isRequired,
+    resetEditForm: PropTypes.func.isRequired,
+    editPost: PropTypes.func.isRequired,
+    writeEditPost: PropTypes.func.isRequired,
+    postToBeEdited: PropTypes.object.isRequired,
+    router: PropTypes.object.isRequired
+  }
+
   componentDidMount() {
     const { requestEditPost, id } = this.props;
 
