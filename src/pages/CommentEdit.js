@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { requestEditCommentary, editCommentary, writeEditCommentary, resetEditComment } from '../actions';
 import { connect } from 'react-redux';
+import Header from '../components/Header';
 import serializeForm from 'form-serialize';
 import '../styling/commentwrite.css';
 
 class CommentEdit extends Component {
-  componentWillMount() {
+  componentDidMount() {
     const { requestEditComment, commentId } = this.props;
 
     requestEditComment(commentId);
@@ -28,10 +29,12 @@ class CommentEdit extends Component {
   }
 
   render() {
-    const { commentToBeEdited, category, parentId } = this.props;
+    const { commentToBeEdited, category, parentId, router } = this.props;
 
     return (
       <div className="CommentEdit">
+        <Header router={router}/>
+
         <h1 className="comment-write__page-title">Edit Comment</h1>
         <form className="comment-write" onSubmit={this.handleSubmit} onChange={this.handleChange} ref='editCommentForm'>
           <label htmlFor="comment-write__body" className="comment-write__label">Your Comment</label>
@@ -57,7 +60,8 @@ function mapStateToProps({ commentToBeEdited }, ownProps) {
     commentId,
     parentId,
     category,
-    commentToBeEdited
+    commentToBeEdited,
+    router: ownProps.router
   }
 }
 

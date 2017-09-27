@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { requestCategories, sendPosting } from '../actions';
 import { connect } from 'react-redux';
+import Header from '../components/Header';
 import serializeForm from 'form-serialize';
 import '../styling/posting-ced.css';
 
 class PostingCreate extends Component {
-  componentWillMount() {
+  componentDidMount() {
     const { requestCats } = this.props;
     requestCats();
   }
@@ -17,10 +18,12 @@ class PostingCreate extends Component {
   }
 
   render() {
-    const { categories } = this.props;
+    const { categories, router } = this.props;
 
     return (
       <div className="PostingCreate">
+        <Header router={router}/>
+
         <h1>Create New Post</h1>
         <form className="post-ced" onSubmit={this.handleSubmit}>
           <label htmlFor="post-ced__title" className="post-ced__label">Title</label>
@@ -48,9 +51,10 @@ class PostingCreate extends Component {
   }
 }
 
-function mapStateToProps({ categories }) {
+function mapStateToProps({ categories }, ownProps) {
   return {
-    categories
+    categories,
+    router: ownProps.router
   }
 }
 

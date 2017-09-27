@@ -2,16 +2,17 @@ import React, { Component } from 'react';
 import { requestCategories } from '../actions';
 import { connect } from 'react-redux';
 import PostList from '../components/PostList';
+import Header from '../components/Header';
 import { Link } from 'react-router';
 import '../styling/categories.css';
 
 class Startpage extends Component {
-  componentWillMount() {
+  componentDidMount() {
     this.props.requestCats();
   }
 
   render() {
-    const { categories, categoryFilter } = this.props
+    const { categories, categoryFilter, router } = this.props
 
     if (categoryFilter !== null && (categories.filter(cat => cat.name === categoryFilter).length === 0)) {
       return <p>The category „{categoryFilter}“ does not exists, sorry.</p>
@@ -19,6 +20,8 @@ class Startpage extends Component {
 
     return (
       <div className="Startpage">
+        <Header router={router}/>
+
         {categoryFilter === null && categories.length > 0 && (
           <ul className="categories">
             {categories.map((cat,i) => (
@@ -40,7 +43,8 @@ function mapStateToProps({ categories }, ownProps) {
 
   return {
     categories,
-    categoryFilter: category ? category : null
+    categoryFilter: category ? category : null,
+    router: ownProps.router
   }
 }
 

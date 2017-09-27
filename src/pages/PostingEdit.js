@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { requestEditPosting, editPosting, writeEditPosting, resetEditPost } from '../actions';
 import { connect } from 'react-redux';
+import Header from '../components/Header';
 import serializeForm from 'form-serialize';
 import '../styling/posting-ced.css';
 
 class PostingEdit extends Component {
-  componentWillMount() {
+  componentDidMount() {
     const { requestEditPost, id } = this.props;
 
     requestEditPost(id);
@@ -28,10 +29,12 @@ class PostingEdit extends Component {
   }
 
   render() {
-    const { postToBeEdited } = this.props;
+    const { postToBeEdited, router } = this.props;
 
     return (
       <div className="PostingEdit">
+        <Header router={router}/>
+
         <h1 className="post-ced__page-title">Edit Post</h1>
         <form className="post-ced" onSubmit={this.handleSubmit} onChange={this.handleChange} ref='editForm'>
           <label htmlFor="post-ced__title" className="post-ced__label">Title</label>
@@ -57,7 +60,8 @@ function mapStateToProps({ postToBeEdited }, ownProps) {
 
   return {
     id,
-    postToBeEdited
+    postToBeEdited,
+    router: ownProps.router
   }
 }
 

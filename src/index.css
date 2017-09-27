@@ -8,17 +8,17 @@ body {
   font-family: sans-serif;
 }
 
+.app {
+  max-width: 50rem;
+  margin: 2.5rem auto 0;
+}
+
 a {
   color: #032336;
 }
 
 a:hover {
   text-decoration: none;
-}
-
-.app {
-  max-width: 50rem;
-  margin: 0 auto;
 }
 
 .cta-btn {

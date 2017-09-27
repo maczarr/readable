@@ -13,7 +13,9 @@ import commentsToArray from '../utils/commentsToArray';
 import VoteScore from '../components/VoteScore';
 import sortBy from 'sort-by';
 import { push } from 'react-router-redux';
+import { Link } from 'react-router';
 import serializeForm from 'form-serialize';
+import Header from '../components/Header';
 import AddIcon from 'react-icons/lib/fa/plus';
 import UserIcon from 'react-icons/lib/fa/user';
 import CommentIcon from 'react-icons/lib/fa/comment';
@@ -24,7 +26,7 @@ import '../styling/commentlist.css';
 import '../styling/commentwrite.css';
 
 class PostingDetails extends Component {
-  componentWillMount() {
+  componentDidMount() {
     const { requestPost, post } = this.props;
 
     requestPost(post.id);
@@ -43,7 +45,17 @@ class PostingDetails extends Component {
   }
 
   render() {
-    const { post, sorting, changeSorting, goToRoute, deletePost, deleteComment, commentFormVisible, switchFormVisibility } = this.props;
+    const {
+      post,
+      sorting,
+      changeSorting,
+      goToRoute,
+      deletePost,
+      deleteComment,
+      commentFormVisible,
+      switchFormVisibility,
+      router
+    } = this.props;
 
     if (post.deleted === true || typeof(post.title) === 'undefined') {
       return <p>No Post found.</p>
@@ -51,13 +63,15 @@ class PostingDetails extends Component {
 
     return (
       <div className="PostingDetails">
+        <Header router={router}/>
+
         <article className="posting posting--single">
           <p className="meta">
             <span className="meta__who">
               <UserIcon size={14} className="meta__user-icon" />
               {post.author}
             </span>
-            <span className="meta__where">Category: <a href={'/'+post.category}>{post.category}</a></span>
+            <span className="meta__where">Category: <Link to={'/'+post.category}>{post.category}</Link></span>
             <time className="meta__when">{humanReadableTime(post.timestamp)}</time>
           </p>
           <h1 className="posting__title">{post.title}</h1>
@@ -160,7 +174,8 @@ function mapStateToProps({ posts, comments, commentSorting, commentFormVisible }
       commentList: commentsAsArray.filter(comment => !comment.deleted && comment.parentId === postId)
     },
     sorting: commentSorting,
-    commentFormVisible
+    commentFormVisible,
+    router: ownProps.router
   }
 }
 
