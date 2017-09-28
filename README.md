@@ -25,7 +25,7 @@ npm start
 Readable expects the necessary API Backend to be available at http://localhost on Port 3001. You can change this in [api.js](src/utils/api.js).
 This App is based on the [ReactND Project Readable API-Server](https://github.com/udacity/reactnd-project-readable-starter) which is *not included* in this project.
 
-Contributing
+## Contributing
 
 This being a Udacity students project I most likely will not accept pull requests.
 
